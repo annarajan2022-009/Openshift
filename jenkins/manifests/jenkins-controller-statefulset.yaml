@@ -31,7 +31,6 @@ spec:
       enableServiceLinks: false
       securityContext:
     
-        runAsUser: 0
       serviceAccountName: "my-jenkins"
       automountServiceAccountToken: true
       initContainers:
@@ -81,8 +80,6 @@ spec:
               drop:
               - ALL
             readOnlyRootFilesystem: true
-            runAsGroup: 1000
-            runAsUser: 1000
             seccompProfile:
               type: RuntimeDefault
           command: [ "sh", "/var/jenkins_config/apply_config.sh" ]
@@ -114,8 +111,6 @@ spec:
               drop:
               - ALL
             readOnlyRootFilesystem: true
-            runAsGroup: 1000
-            runAsUser: 1000
             seccompProfile:
               type: RuntimeDefault
           args: [ "--httpPort=8080"]
