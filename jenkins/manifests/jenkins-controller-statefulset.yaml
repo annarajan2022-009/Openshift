@@ -85,6 +85,9 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           command: [ "sh", "/var/jenkins_config/apply_config.sh" ]
+          env:
+            - name: HOME
+              value: /var/jenkins_home
           resources:
             limits:
               cpu: 500m
