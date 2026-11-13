@@ -1,0 +1,29 @@
+---
+# Source: jenkins/templates/jenkins-controller-route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  namespace: jenkins
+  labels:
+    app: my-jenkins
+    release: "my-jenkins"
+    heritage: "Helm"
+    component: "my-jenkins-jenkins-controller"
+    "app.kubernetes.io/name": 'jenkins'
+    "app.kubernetes.io/managed-by": "Helm"
+    "app.kubernetes.io/instance": "my-jenkins"
+    "app.kubernetes.io/component": "jenkins-controller"
+    "helm.sh/chart": "jenkins-5.12.0"
+  name: my-jenkins
+spec:
+  host: 
+  port:
+    targetPort: http
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: my-jenkins
+    weight: 100
+  wildcardPolicy: None
