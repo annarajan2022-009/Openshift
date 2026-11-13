@@ -50,6 +50,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: HOME
+              value: /var/jenkins_home
             - name: LABEL
               value: "my-jenkins-jenkins-config"
             - name: HEALTH_PORT
