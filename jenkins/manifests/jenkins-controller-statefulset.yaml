@@ -123,6 +123,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: HOME
+              value: /var/jenkins_home
             - name: JAVA_OPTS
               value: >-
                  -Dcasc.reload.token=$(POD_NAME) 
