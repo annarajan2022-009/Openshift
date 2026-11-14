@@ -6,14 +6,13 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com
+    repoURL: https://github.com/annarajan2022-009/Openshift.git
     targetRevision: main
     path: monitoring/kube-prometheus-stack
     helm:
       releaseName: prometheus-stack
       valueFiles:
         - ../custom-values.yaml
-
   destination:
     server: https://default.svc
     namespace: monitoring
