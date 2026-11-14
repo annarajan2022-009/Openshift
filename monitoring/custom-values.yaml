@@ -1,0 +1,73 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.io
+    chart: kube-prometheus-stack
+    targetRevision: 93.1.1
+    helm:
+      releaseName: prometheus-stack
+      valuesObject:
+        # Disable components that conflict with OpenShift's built-in monitoring
+        nodeExporter:
+          enabled: false
+        kubeEtcd:
+          enabled: false
+        kubeControllerManager:
+          enabled: false
+        kubeScheduler:
+          enabled: false
+        kubeProxy:
+          enabled: false
+
+        # Allow OpenShift SCC to assign UIDs/GIDs automatically
+        prometheusOperator:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: null
+            fsGroup: null
+          admissionWebhooks:
+            patch:
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: null
+
+        prometheus:
+          prometheusSpec:
+            retention: 2d
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: null
+              fsGroup: null
+
+        alertmanager:
+          alertmanagerSpec:
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: null
+              fsGroup: null
+
+        grafana:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: null
+            fsGroup: null
+          initChownData:
+            enabled: false
+          adminPassword: "admin"
+
+  destination:
+    server: https://default.svc
+    namespace: monitoring
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
