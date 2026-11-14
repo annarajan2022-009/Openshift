@@ -52,4 +52,4 @@ kube-state-metrics:
   containerSecurityContext:
     runAsUser: null
     runAsGroup: null
-    fsGroup: null
+
