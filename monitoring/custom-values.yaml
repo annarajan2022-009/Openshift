@@ -45,3 +45,11 @@ grafana:
   initChownData:
     enabled: false
   adminPassword: "admin"
+
+kube-state-metrics:
+  securityContext:
+    enabled: false
+  containerSecurityContext:
+    runAsUser: null
+    runAsGroup: null
+    fsGroup: null
