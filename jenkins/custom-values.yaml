@@ -24,6 +24,7 @@ controller:
   # 4. OpenShift security context compatibility (null lets OpenShift assign random UIDs)
   runAsUser: null
   fsGroup: null
+  overwritePlugins: true
 
   # 5. Fix read-only root filesystem /.cache error on OpenShift
   initContainerEnv:
