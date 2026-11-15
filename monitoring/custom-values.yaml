@@ -48,9 +48,14 @@ grafana:
 
 kube-state-metrics:
   securityContext:
-    enabled: false
+    runAsNonRoot: true
+    runAsUser: 1000700000
+    runAsGroup: 1000700000
+    fsGroup: 1000700000
   containerSecurityContext:
     runAsNonRoot: true
+    runAsUser: 1000700000
+    runAsGroup: 1000700000
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
     capabilities:
@@ -58,4 +63,13 @@ kube-state-metrics:
         - ALL
 
 
-
+#kube-state-metrics:
+#  securityContext:
+#    enabled: false
+#  containerSecurityContext:
+#    runAsNonRoot: true
+#    allowPrivilegeEscalation: false
+#    readOnlyRootFilesystem: true
+#    capabilities:
+#     drop:
+#        - ALL
