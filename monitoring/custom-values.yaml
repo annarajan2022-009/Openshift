@@ -21,6 +21,7 @@ prometheusOperator:
       securityContext:
         runAsNonRoot: true
         runAsUser: null
+  revisionHistoryLimit: 2
 
 prometheus:
   prometheusSpec:
@@ -45,6 +46,7 @@ grafana:
   initChownData:
     enabled: false
   adminPassword: "admin"
+  revisionHistoryLimit: 2
 
 kube-state-metrics:
   securityContext:
@@ -61,6 +63,16 @@ kube-state-metrics:
     capabilities:
       drop:
         - ALL
+  revisionHistoryLimit: 2
+
+grafana:
+  revisionHistoryLimit: 2
+
+kube-state-metrics:
+  revisionHistoryLimit: 2
+
+prometheusOperator:
+  revisionHistoryLimit: 2
 
 
 #kube-state-metrics:
