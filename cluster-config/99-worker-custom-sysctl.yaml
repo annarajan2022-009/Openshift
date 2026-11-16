@@ -1,0 +1,21 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  name: 99-worker-custom-sysctl
+  labels:
+    machineconfiguration.openshift.io/role: worker
+spec:
+  config:
+    ignition:
+      version: 3.2.0
+    storage:
+      files:
+        - path: /etc/sysctl.d/99-custom-tuning.conf
+          mode: 0644
+          overwrite: true
+          contents:
+            # Base64 encoded content of:
+            # net.core.somaxconn = 32768
+            # fs.file-max = 2097152
+            # vm.max_map_count = 262144
+            source: data:text/plain;charset=utf-8;base64,bmV0LmNvcmUuc29tYXhjb25uID0gMzI3NjgKZnMuZmlsZS1tYXggPSAyMDk3MTUyCnZtLm1heF9tYXBfY291bnQgPSAyNjIxNDQK
