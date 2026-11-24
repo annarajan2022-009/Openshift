@@ -1,0 +1,95 @@
+# Disable host-level nodeExporter (blocked by OpenShift restricted-v2 SCC)
+nodeExporter:
+  enabled: false
+
+# Disable kube-proxy/etcd/scheduler scraping (managed by OpenShift control plane)
+kubeProxy:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+
+# Prometheus Operator
+prometheusOperator:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: null
+    fsGroup: null
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
+# Prometheus Server
+prometheus:
+  prometheusSpec:
+    retention: 2h
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: null
+      fsGroup: null
+    resources:
+      requests:
+        cpu: 300m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+
+# Grafana Dashboard + OpenShift Route
+grafana:
+  adminPassword: "MyCustomGrafanaPassword123!"
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: null
+    fsGroup: null
+  initChownData:
+    enabled: false # Required on OpenShift (prevents chown root error)
+  resources:
+    requests:
+      cpu: 150m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  route:
+    main:
+      enabled: true
+      host: grafana-monitoring.apps-crc.testing
+      tls:
+        termination: edge
+
+# Alertmanager (lightweight)
+alertmanager:
+  alertmanagerSpec:
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: null
+      fsGroup: null
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
+
+# kube-state-metrics
+kube-state-metrics:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: null
+    fsGroup: null
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
