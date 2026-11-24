@@ -18,6 +18,12 @@ prometheusOperator:
     runAsNonRoot: true
     runAsUser: null
     fsGroup: null
+  admissionWebhooks:
+    patch:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: null
+  revisionHistoryLimit: 2  
   resources:
     requests:
       cpu: 100m
@@ -30,6 +36,7 @@ prometheusOperator:
 prometheus:
   prometheusSpec:
     retention: 2h
+    retentionSize: "1GB"
     securityContext:
       runAsNonRoot: true
       runAsUser: null
@@ -44,7 +51,7 @@ prometheus:
 
 # Grafana Dashboard + OpenShift Route
 grafana:
-  adminPassword: "MyCustomGrafanaPassword123!"
+  adminPassword: "admin"
   securityContext:
     runAsNonRoot: true
     runAsUser: null
