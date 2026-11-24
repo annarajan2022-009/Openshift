@@ -6,15 +6,13 @@ metadata:
 spec:
   project: default
   sources:
-    # Source 1: Official Prometheus Community Helm Chart
     - repoURL: https://github.io
       chart: kube-prometheus-stack
-      targetRevision: 65.1.1
+      targetRevision: 93.9.0
       helm:
-        releaseName: monitoring
+        releaseName: prometheus-stack
         valueFiles:
-          - $values/monitoring/values.yaml
-    # Source 2: Your GitHub Repo containing monitoring/values.yaml
+          - $values/monitoring/prom-grafana-values.yaml
     - repoURL: https://github.com
       targetRevision: main
       ref: values
