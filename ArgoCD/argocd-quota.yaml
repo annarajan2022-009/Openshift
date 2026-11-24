@@ -1,0 +1,14 @@
+oc new-project argocd
+cat <<EOF | oc apply -f -
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: argocd-quota
+  namespace: argocd
+spec:
+  hard:
+    requests.cpu: "1500m"
+    requests.memory: "2Gi"
+    limits.cpu: "3000m"
+    limits.memory: "4Gi"
+EOF
