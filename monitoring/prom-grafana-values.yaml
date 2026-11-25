@@ -19,10 +19,11 @@ prometheusOperator:
     runAsUser: null
     fsGroup: null
   admissionWebhooks:
+    enabled: false
     patch:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: null
+      enabled: false
+  tls:
+    enabled: false
   revisionHistoryLimit: 2  
   resources:
     requests:
@@ -53,9 +54,14 @@ prometheus:
 grafana:
   adminPassword: "admin"
   securityContext:
-    runAsNonRoot: true
     runAsUser: null
+    runAsGroup: null
     fsGroup: null
+  containerSecurityContext:
+    runAsUser: null
+    runAsGroup: null
+  initChownData:
+    enabled: false
   initChownData:
     enabled: false # Required on OpenShift (prevents chown root error)
   resources:
