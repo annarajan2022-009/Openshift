@@ -1,4 +1,3 @@
-cat <<EOF > argocd-values.yaml
 openshift:
   enabled: true
 
@@ -44,30 +43,7 @@ applicationSet:
   enabled: false
 
 notifications:
-  enabled: false      
-
-
-#applicationSet:
-#  resources:
-#    requests:
-#      cpu: 50m
-#      memory: 64Mi
-#   limits:
-#      cpu: 200m
-#      memory: 128Mi
-
-#notifications:
-#  resources:
-#    requests:
-#      cpu: 50m
-#      memory: 64Mi
-#    limits:
-#      cpu: 200m
-#      memory: 128Mi
+  enabled: false
 
 dex:
   enabled: false
-EOF
-
-helm install argocd argo/argo-cd -n argocd -f argocd-values.yaml
-oc expose svc/argocd-server -n argocd
