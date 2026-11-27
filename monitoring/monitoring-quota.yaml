@@ -5,9 +5,26 @@ metadata:
   namespace: monitoring
 spec:
   hard:
-    requests.cpu: "2000m"
-    requests.memory: "3Gi"
-    requests.ephemeral-storage: "1500Mi"
-    limits.cpu: "4000m"
-    limits.memory: "6Gi"
-    limits.ephemeral-storage: "3Gi"
+    requests.cpu: "4000m"
+    requests.memory: "5Gi"
+    requests.ephemeral-storage: "2500Mi"
+    limits.cpu: "8000m"
+    limits.memory: "10Gi"
+    limits.ephemeral-storage: "4500Mi"
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: monitoring-default-limits
+  namespace: monitoring
+spec:
+  limits:
+    - default:
+        cpu: 200m
+        memory: 256Mi
+        ephemeral-storage: 256Mi
+      defaultRequest:
+        cpu: 50m
+        memory: 64Mi
+        ephemeral-storage: 64Mi
+      type: Container
