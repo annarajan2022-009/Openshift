@@ -1,8 +1,5 @@
-# Disable host-level nodeExporter (blocked by OpenShift restricted-v2 SCC)
 nodeExporter:
   enabled: false
-
-# Disable control plane scraping (managed by OpenShift)
 kubeProxy:
   enabled: false
 kubeEtcd:
@@ -12,7 +9,6 @@ kubeScheduler:
 kubeControllerManager:
   enabled: false
 
-# Prometheus Operator
 prometheusOperator:
   securityContext:
     runAsNonRoot: true
@@ -35,7 +31,6 @@ prometheusOperator:
       memory: 256Mi
       ephemeral-storage: 256Mi
 
-# Prometheus Server (Strict 2h retention + 1.2Gi disk ceiling)
 prometheus:
   prometheusSpec:
     retention: 2h
@@ -58,7 +53,6 @@ prometheus:
         memory: 1536Mi
         ephemeral-storage: 1200Mi
 
-# Grafana Dashboard + OpenShift Route + Capped Storage
 grafana:
   adminPassword: "admin"
   revisionHistoryLimit: 1
@@ -78,6 +72,12 @@ grafana:
     runAsGroup: null
   initChownData:
     enabled: false
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      url: http://loki:3100
+      access: proxy
+      isDefault: false
   resources:
     requests:
       cpu: 100m
@@ -94,14 +94,6 @@ grafana:
       tls:
         termination: edge
 
-  additionalDataSources:
-    - name: Loki
-      type: loki
-      url: http://loki:3100
-      access: proxy
-      isDefault: false
-
-# Alertmanager (Lightweight + Capped Storage)
 alertmanager:
   alertmanagerSpec:
     retention: 2h
@@ -122,7 +114,6 @@ alertmanager:
         memory: 128Mi
         ephemeral-storage: 128Mi
 
-# kube-state-metrics
 kube-state-metrics:
   revisionHistoryLimit: 1
   securityContext:

@@ -1,5 +1,4 @@
 deploymentMode: SingleBinary
-
 loki:
   auth_enabled: false
   commonConfig:
@@ -25,7 +24,6 @@ loki:
     retention_enabled: true
     retention_delete_delay: 15m
     delete_request_store: filesystem
-
 singleBinary:
   replicas: 1
   persistence:
@@ -47,8 +45,6 @@ singleBinary:
       cpu: 400m
       memory: 512Mi
       ephemeral-storage: 1Gi
-
-# Disable distributed/caching components to save RAM & disk
 backend:
   replicas: 0
 read:

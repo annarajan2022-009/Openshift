@@ -10,7 +10,7 @@ spec:
     targetRevision: main
     path: monitoring/apps
   destination:
-    server: https://default.svc
+    name: in-cluster
     namespace: argocd
   syncPolicy:
     automated:
