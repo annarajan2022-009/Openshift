@@ -8,14 +8,14 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: https://github.io
+    - repoURL: https://grafana.github.io/helm-charts
       chart: alloy
       targetRevision: "*"
       helm:
         releaseName: alloy
         valueFiles:
           - $values/monitoring/values/alloy-values.yaml
-    - repoURL: https://github.com
+    - repoURL: https://github.com/annarajan2022-009/Openshift.git
       targetRevision: main
       ref: values
   destination:

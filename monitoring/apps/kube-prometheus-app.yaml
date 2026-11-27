@@ -8,14 +8,14 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: https://github.io
+    - repoURL: https://prometheus-community.github.io/helm-charts
       chart: kube-prometheus-stack
       targetRevision: "*"
       helm:
         releaseName: prometheus-stack
         valueFiles:
           - $values/monitoring/values/prom-grafana-values.yaml
-    - repoURL: https://github.com
+    - repoURL: https://github.com/annarajan2022-009/Openshift.git
       targetRevision: main
       ref: values
   destination:

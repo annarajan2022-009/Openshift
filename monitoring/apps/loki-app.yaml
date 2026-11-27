@@ -8,14 +8,14 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: https://github.io
+    - repoURL: https://grafana-community.github.io/helm-charts
       chart: loki
       targetRevision: "*"
       helm:
         releaseName: loki
         valueFiles:
           - $values/monitoring/values/loki-values.yaml
-    - repoURL: https://github.com
+    - repoURL: https://github.com/annarajan2022-009/Openshift.git
       targetRevision: main
       ref: values
   destination:

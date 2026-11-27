@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com
+    repoURL: https://github.com/annarajan2022-009/Openshift.git
     targetRevision: main
     path: monitoring/rbac
   destination:
