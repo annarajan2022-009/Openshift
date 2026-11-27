@@ -5,13 +5,12 @@ controller:
 
   resources:
     requests:
-      cpu: 200m
-      memory: 512Mi
-      ephemeral-storage: 512Mi
+      cpu: 500m        # Increased from 200m so Java boots faster
+      memory: 1Gi      # Increased from 512Mi
     limits:
-      cpu: 1000m
-      memory: 2Gi
-      ephemeral-storage: 1Gi
+      cpu: 1500m       # Increased from 1000m
+      memory: 2.5Gi    
+
 
   initContainerResources:
     requests:
@@ -21,7 +20,7 @@ controller:
     limits:
       cpu: 500m
       memory: 1536Mi
-      ephemeral-storage: 512Mi
+      
 
   sidecars:
     configAutoReload:
@@ -35,6 +34,7 @@ controller:
           cpu: 100m
           memory: 128Mi
           ephemeral-storage: 256Mi
+
 
   # OpenShift SCC & Read-Only Root Filesystem Fixes
   runAsUser: null
@@ -79,4 +79,14 @@ agent:
 
 persistence:
   enabled: true
+  storageClass: "crc-csi-hostpath-provisioner"
   size: "3Gi"
+
+  # Give Jenkins up to 5 minutes (30 * 10s) to finish booting on CRC
+  startupProbe:
+    httpGet:
+      path: /login
+      port: http
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30  
