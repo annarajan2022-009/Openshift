@@ -2,7 +2,7 @@
 nodeExporter:
   enabled: false
 
-# Disable kube-proxy/etcd/scheduler scraping (managed by OpenShift control plane)
+# Disable control plane scraping (managed by OpenShift)
 kubeProxy:
   enabled: false
 kubeEtcd:
@@ -24,36 +24,52 @@ prometheusOperator:
       enabled: false
   tls:
     enabled: false
-  revisionHistoryLimit: 2  
+  revisionHistoryLimit: 1
   resources:
     requests:
       cpu: 100m
       memory: 128Mi
+      ephemeral-storage: 128Mi
     limits:
       cpu: 300m
       memory: 256Mi
+      ephemeral-storage: 256Mi
 
-# Prometheus Server
+# Prometheus Server (Strict 2h retention + 1.2Gi disk ceiling)
 prometheus:
   prometheusSpec:
     retention: 2h
-    retentionSize: "1GB"
+    retentionSize: "900MB"
+    walCompression: true
+    storageSpec:
+      emptyDir:
+        sizeLimit: 1200Mi
     securityContext:
       runAsNonRoot: true
       runAsUser: null
       fsGroup: null
     resources:
       requests:
-        cpu: 300m
-        memory: 1Gi
+        cpu: 250m
+        memory: 768Mi
+        ephemeral-storage: 512Mi
       limits:
         cpu: 1000m
-        memory: 2Gi
+        memory: 1536Mi
+        ephemeral-storage: 1200Mi
 
-# Grafana Dashboard + OpenShift Route
+# Grafana Dashboard + OpenShift Route + Capped Storage
 grafana:
   adminPassword: "admin"
+  revisionHistoryLimit: 1
+  persistence:
+    enabled: false
+  extraEmptyDirMounts:
+    - name: grafana-storage
+      mountPath: /var/lib/grafana
+      sizeLimit: 256Mi
   securityContext:
+    runAsNonRoot: true
     runAsUser: null
     runAsGroup: null
     fsGroup: null
@@ -62,15 +78,15 @@ grafana:
     runAsGroup: null
   initChownData:
     enabled: false
-  initChownData:
-    enabled: false # Required on OpenShift (prevents chown root error)
   resources:
     requests:
-      cpu: 150m
-      memory: 256Mi
+      cpu: 100m
+      memory: 192Mi
+      ephemeral-storage: 128Mi
     limits:
-      cpu: 500m
-      memory: 512Mi
+      cpu: 400m
+      memory: 384Mi
+      ephemeral-storage: 256Mi
   route:
     main:
       enabled: true
@@ -78,9 +94,20 @@ grafana:
       tls:
         termination: edge
 
-# Alertmanager (lightweight)
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      url: http://loki:3100
+      access: proxy
+      isDefault: false
+
+# Alertmanager (Lightweight + Capped Storage)
 alertmanager:
   alertmanagerSpec:
+    retention: 2h
+    storage:
+      emptyDir:
+        sizeLimit: 128Mi
     securityContext:
       runAsNonRoot: true
       runAsUser: null
@@ -89,12 +116,15 @@ alertmanager:
       requests:
         cpu: 50m
         memory: 64Mi
+        ephemeral-storage: 64Mi
       limits:
-        cpu: 200m
+        cpu: 150m
         memory: 128Mi
+        ephemeral-storage: 128Mi
 
 # kube-state-metrics
 kube-state-metrics:
+  revisionHistoryLimit: 1
   securityContext:
     runAsNonRoot: true
     runAsUser: null
@@ -103,6 +133,8 @@ kube-state-metrics:
     requests:
       cpu: 50m
       memory: 64Mi
+      ephemeral-storage: 64Mi
     limits:
       cpu: 200m
       memory: 128Mi
+      ephemeral-storage: 128Mi
