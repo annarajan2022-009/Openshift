@@ -30,6 +30,16 @@ prometheusOperator:
       cpu: 300m
       memory: 256Mi
       ephemeral-storage: 256Mi
+  prometheusConfigReloader:
+    resources:
+      requests:
+        cpu: 20m
+        memory: 32Mi
+        ephemeral-storage: 16Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi
+        ephemeral-storage: 32Mi
 
 prometheus:
   prometheusSpec:
@@ -58,10 +68,6 @@ grafana:
   revisionHistoryLimit: 1
   persistence:
     enabled: false
-  extraEmptyDirMounts:
-    - name: grafana-storage
-      mountPath: /var/lib/grafana
-      sizeLimit: 256Mi
   securityContext:
     runAsNonRoot: true
     runAsUser: null
