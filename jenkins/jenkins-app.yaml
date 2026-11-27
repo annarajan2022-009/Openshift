@@ -6,14 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    # Replace with your actual Git repository URL
     repoURL: https://github.com/annarajan2022-009/Openshift.git
     targetRevision: main
-    path: jenkins
-    helm:
-      releaseName: my-jenkins
-      valueFiles:
-        - jenkins-values.yaml
+    path: jenkins/manifest
   destination:
     server: https://default.svc
     namespace: jenkins
@@ -21,5 +16,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=false
