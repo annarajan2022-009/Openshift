@@ -13,12 +13,11 @@ controller:
 
   resources:
     requests:
-      cpu: 500m        # Increased from 200m so Java boots faster
-      memory: 1Gi      # Increased from 512Mi
+      cpu: 500m
+      memory: 1Gi
     limits:
-      cpu: 1500m       # Increased from 1000m
-      memory: 2.5Gi    
-
+      cpu: 1500m
+      memory: 2.5Gi
 
   initContainerResources:
     requests:
@@ -28,7 +27,6 @@ controller:
     limits:
       cpu: 500m
       memory: 1536Mi
-      
 
   sidecars:
     configAutoReload:
@@ -37,11 +35,16 @@ controller:
         requests:
           cpu: 50m
           memory: 64Mi
-          ephemeral-storage: 128Mi
         limits:
           cpu: 100m
           memory: 128Mi
-          ephemeral-storage: 256Mi
+      initContainerResources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
 
 
   # OpenShift SCC & Read-Only Root Filesystem Fixes
@@ -66,7 +69,7 @@ controller:
     capabilities:
       drop:
         - ALL
-        
+
   sidecars:
     configAutoReload:
       enabled: false
