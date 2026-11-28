@@ -45,8 +45,35 @@ controller:
 
 
   # OpenShift SCC & Read-Only Root Filesystem Fixes
-  openshift:
-    enabled: true
+#  openshift:
+#    enabled: true
+
+  # ... keep your admin, resources, initContainerEnv, and route settings ...
+
+  # Explicitly clear hardcoded UID/GID 1000 for OpenShift restricted-v2 SCC
+  runAsUser: null
+  fsGroup: null
+  podSecurityContextOverride:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  containerSecurityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+
+  sidecars:
+    configAutoReload:
+      enabled: false
+      containerSecurityContext:
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
 
   initContainerEnv:
     - name: HOME
