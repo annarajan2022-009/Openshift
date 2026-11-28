@@ -3,6 +3,9 @@ controller:
     username: "admin"
     password: "MyCustomJenkinsPassword123!"
 
+ # Add this line to prevent the init container from hanging/failing on existing plugins
+  overwritePlugins: true    
+
   resources:
     requests:
       cpu: 500m        # Increased from 200m so Java boots faster
