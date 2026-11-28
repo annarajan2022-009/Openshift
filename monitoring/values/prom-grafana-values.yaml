@@ -95,7 +95,7 @@ grafana:
       ephemeral-storage: 256Mi
   route:
     main:
-      enabled: false
+      enabled: true
       host: grafana-monitoring.apps-crc.testing
       tls:
         termination: edge
