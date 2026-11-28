@@ -58,13 +58,15 @@ controller:
     seccompProfile:
       type: RuntimeDefault
   containerSecurityContext:
+    runAsUser: null
+    runAsGroup: null
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
     capabilities:
       drop:
         - ALL
-
+        
   sidecars:
     configAutoReload:
       enabled: false
