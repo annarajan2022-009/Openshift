@@ -2,24 +2,24 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: loki
-  namespace: argocd
+  namespace: openshift-gitops
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   project: default
   sources:
-    - repoURL: https://grafana-community.github.io/helm-charts
+    - repoURL: https://github.io
       chart: loki
-      targetRevision: "6.29.0"
+      targetRevision: "*"
       helm:
         releaseName: loki
         valueFiles:
           - $values/monitoring/values/loki-values.yaml
-    - repoURL: https://github.com/annarajan2022-009/Openshift.git
+    - repoURL: https://github.com
       targetRevision: main
       ref: values
   destination:
-    name: in-cluster
+    server: https://default.svc
     namespace: monitoring
   syncPolicy:
     automated:

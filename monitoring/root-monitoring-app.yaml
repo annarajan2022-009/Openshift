@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: monitoring-root
-  namespace: argocd
+  namespace: openshift-gitops
 spec:
   project: default
   source:
@@ -10,8 +10,8 @@ spec:
     targetRevision: main
     path: monitoring/apps
   destination:
-    name: in-cluster
-    namespace: argocd
+    server: https://default.svc
+    namespace: openshift-gitops
   syncPolicy:
     automated:
       prune: true
