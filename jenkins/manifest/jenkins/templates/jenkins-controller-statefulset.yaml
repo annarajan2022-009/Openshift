@@ -175,7 +175,7 @@ spec:
         projected:
           sources:
           - secret:
-              name: my-jenkins
+              name: jenkins-admin-secret
               items:
                 - key: jenkins-admin-user
                   path: chart-admin-username

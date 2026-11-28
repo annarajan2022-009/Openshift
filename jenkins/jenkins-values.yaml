@@ -1,7 +1,12 @@
 controller:
+#  admin:
+#    username: "admin"
+#    password: "MyCustomJenkinsPassword123!"
   admin:
-    username: "admin"
-    password: "MyCustomJenkinsPassword123!"
+    existingSecret: "jenkins-admin-secret"
+    userKey: "jenkins-admin-user"
+    passwordKey: "jenkins-admin-password"
+
 
  # Add this line to prevent the init container from hanging/failing on existing plugins
   overwritePlugins: true    
