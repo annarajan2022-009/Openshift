@@ -41,6 +41,10 @@ controller:
       drop:
         - ALL
 
+  sidecars:
+    configAutoReload:
+      enabled: false
+
   initContainerEnv:
     - name: HOME
       value: /var/jenkins_home
@@ -78,21 +82,3 @@ persistence:
   enabled: true
   storageClass: "crc-csi-hostpath-provisioner"
   size: "3Gi"
-
-sidecars:
-  configAutoReload:
-    enabled: false
-    resources:
-      requests:
-        cpu: 50m
-        memory: 64Mi
-      limits:
-        cpu: 100m
-        memory: 128Mi
-    initContainerResources:
-      requests:
-        cpu: 50m
-        memory: 64Mi
-      limits:
-        cpu: 100m
-        memory: 128Mi

@@ -26,7 +26,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: jenkins
       annotations:
-        checksum/config: d1f8faff175a8024ae2eb282f907f5aa0a5dd4b1f793cff77a488746d1f43a79
+        checksum/config: 8717c0a98808905221b3203a77da0d9896d23c4acde1b78f8c24d47ad532c453
     spec:
       enableServiceLinks: false
       securityContext:
@@ -36,42 +36,6 @@ spec:
       serviceAccountName: "my-jenkins"
       automountServiceAccountToken: true
       initContainers:
-        - name: config-reload-init
-          image: "docker.io/kiwigrid/k8s-sidecar:2.14.3"
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-              - ALL
-            readOnlyRootFilesystem: true
-            seccompProfile:
-              type: RuntimeDefault
-          env:
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: LABEL
-              value: "my-jenkins-jenkins-config"
-            - name: HEALTH_PORT
-              value: "8060"
-            - name: FOLDER
-              value: "/var/jenkins_home/casc_configs"
-            - name: NAMESPACE
-              value: 'jenkins'
-            - name: METHOD
-              value: "LIST"
-        
-          resources:
-            {}
-          volumeMounts:
-            - name: sc-config-volume
-              mountPath: "/var/jenkins_home/casc_configs"
-            - name: jenkins-home
-              mountPath: /var/jenkins_home
-            - name: tmp-volume
-              mountPath: /tmp
 
         - name: "init"
           image: "docker.io/jenkins/jenkins:2.580.2-jdk25"
@@ -133,7 +97,7 @@ spec:
                   fieldPath: metadata.name
             - name: JAVA_OPTS
               value: >-
-                 -Dcasc.reload.token=$(POD_NAME) 
+                
             - name: JENKINS_OPTS
               value: >-
                  --webroot=/var/jenkins_cache/war 
@@ -187,8 +151,6 @@ spec:
             - mountPath: /usr/share/jenkins/ref/plugins/
               name: plugin-dir
               readOnly: false
-            - name: sc-config-volume
-              mountPath: /var/jenkins_home/casc_configs
             - name: jenkins-secrets
               mountPath: /run/secrets/additional
               readOnly: true
@@ -196,46 +158,6 @@ spec:
               mountPath: /var/jenkins_cache
             - mountPath: /tmp
               name: tmp-volume
-        - name: config-reload
-          image: "docker.io/kiwigrid/k8s-sidecar:2.14.3"
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-              - ALL
-            readOnlyRootFilesystem: true
-            seccompProfile:
-              type: RuntimeDefault
-          env:
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: LABEL
-              value: "my-jenkins-jenkins-config"
-            - name: HEALTH_PORT
-              value: "8060"
-            - name: FOLDER
-              value: "/var/jenkins_home/casc_configs"
-            - name: NAMESPACE
-              value: 'jenkins'
-            - name: REQ_URL
-              value: "http://localhost:8080/reload-configuration-as-code/?casc-reload-token=$(POD_NAME)"
-            - name: REQ_METHOD
-              value: "POST"
-            - name: REQ_RETRY_CONNECT
-              value: "10"
-        
-          resources:
-            {}
-          volumeMounts:
-            - name: sc-config-volume
-              mountPath: "/var/jenkins_home/casc_configs"
-            - name: jenkins-home
-              mountPath: /var/jenkins_home
-            - name: tmp-volume
-              mountPath: /tmp
 
       volumes:
       - name: plugins
