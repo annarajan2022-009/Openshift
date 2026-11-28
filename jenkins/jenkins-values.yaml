@@ -1,15 +1,11 @@
 controller:
-#  admin:
-#    username: "admin"
-#    password: "MyCustomJenkinsPassword123!"
   admin:
     existingSecret: "jenkins-admin-secret"
     userKey: "jenkins-admin-user"
     passwordKey: "jenkins-admin-password"
 
-
- # Add this line to prevent the init container from hanging/failing on existing plugins
-  overwritePlugins: true    
+  # Prevent the init container from hanging/failing on existing plugins
+  overwritePlugins: true
 
   resources:
     requests:
@@ -28,31 +24,6 @@ controller:
       cpu: 500m
       memory: 1536Mi
 
-  sidecars:
-    configAutoReload:
-      enabled: false
-      resources:
-        requests:
-          cpu: 50m
-          memory: 64Mi
-        limits:
-          cpu: 100m
-          memory: 128Mi
-      initContainerResources:
-        requests:
-          cpu: 50m
-          memory: 64Mi
-        limits:
-          cpu: 100m
-          memory: 128Mi
-
-
-  # OpenShift SCC & Read-Only Root Filesystem Fixes
-#  openshift:
-#    enabled: true
-
-  # ... keep your admin, resources, initContainerEnv, and route settings ...
-
   # Explicitly clear hardcoded UID/GID 1000 for OpenShift restricted-v2 SCC
   runAsUser: null
   fsGroup: null
@@ -70,21 +41,20 @@ controller:
       drop:
         - ALL
 
-  sidecars:
-    configAutoReload:
-      enabled: false
-      containerSecurityContext:
-        runAsNonRoot: true
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
-
   initContainerEnv:
     - name: HOME
       value: /var/jenkins_home
     - name: JAVA_TOOL_OPTIONS
-      value: "-Xmx1024m"      
+      value: "-Xmx1024m"
+
+  # Give Jenkins up to 5 minutes (30 * 10s) to finish booting on CRC
+  startupProbe:
+    httpGet:
+      path: /login
+      port: http
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
 
   # OpenShift Route with HTTPS Edge Termination
   route:
@@ -95,9 +65,7 @@ controller:
       termination: edge
 
 agent:
-  podRetention: "Never"  # Options: "Never", "OnFailure", "Always", "Default"
-  # Optional: If using "OnFailure" or "Always", set a timeout (in minutes) so old pods auto-delete:
-  # idleMinutes: 10
+  podRetention: "Never"
   resources:
     requests:
       cpu: 250m
@@ -111,11 +79,20 @@ persistence:
   storageClass: "crc-csi-hostpath-provisioner"
   size: "3Gi"
 
-  # Give Jenkins up to 5 minutes (30 * 10s) to finish booting on CRC
-  startupProbe:
-    httpGet:
-      path: /login
-      port: http
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 30  
+sidecars:
+  configAutoReload:
+    enabled: false
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+    initContainerResources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi

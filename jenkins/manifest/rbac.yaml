@@ -21,6 +21,25 @@ rules:
   verbs: ["create", "delete", "deletecollection", "patch", "update"]
 ---
 # Source: jenkins/templates/rbac.yaml
+# The sidecar container which is responsible for reloading configuration changes
+# needs permissions to watch ConfigMaps
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: my-jenkins-casc-reload
+  namespace: jenkins
+  labels:
+    "app.kubernetes.io/name": 'jenkins'
+    "app.kubernetes.io/managed-by": "Helm"
+    "app.kubernetes.io/instance": "my-jenkins"
+    "app.kubernetes.io/component": "jenkins-controller"
+    "helm.sh/chart": "jenkins-5.13.3"
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "watch", "list"]
+---
+# Source: jenkins/templates/rbac.yaml
 # We bind the role to the Jenkins service account. The role binding is created in the namespace
 # where the agents are supposed to run.
 apiVersion: rbac.authorization.k8s.io/v1
@@ -38,6 +57,27 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: my-jenkins-schedule-agents
+subjects:
+- kind: ServiceAccount
+  name: my-jenkins
+  namespace: jenkins
+---
+# Source: jenkins/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: my-jenkins-watch-configmaps
+  namespace: jenkins
+  labels:
+    "app.kubernetes.io/name": 'jenkins'
+    "app.kubernetes.io/managed-by": "Helm"
+    "app.kubernetes.io/instance": "my-jenkins"
+    "app.kubernetes.io/component": "jenkins-controller"
+    "helm.sh/chart": "jenkins-5.13.3"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: my-jenkins-casc-reload
 subjects:
 - kind: ServiceAccount
   name: my-jenkins
