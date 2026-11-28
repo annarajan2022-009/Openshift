@@ -26,13 +26,15 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: jenkins
       annotations:
-        checksum/config: b4856b0082ff155f9f03040b786d61c718fc765ac4780c107bf17250b8236fea
+        checksum/config: 8717c0a98808905221b3203a77da0d9896d23c4acde1b78f8c24d47ad532c453
     spec:
       enableServiceLinks: false
       securityContext:
+    
+        runAsUser: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
         runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
       serviceAccountName: "my-jenkins"
       automountServiceAccountToken: true
       initContainers:
@@ -47,7 +49,7 @@ spec:
               - ALL
             readOnlyRootFilesystem: true
             runAsGroup: 1000
-            runAsNonRoot: true
+            runAsUser: 1000
             seccompProfile:
               type: RuntimeDefault
           command: [ "sh", "/var/jenkins_config/apply_config.sh" ]
@@ -59,7 +61,6 @@ spec:
           resources:
             limits:
               cpu: 500m
-              ephemeral-storage: 512Mi
               memory: 1536Mi
             requests:
               cpu: 100m
@@ -87,7 +88,7 @@ spec:
               - ALL
             readOnlyRootFilesystem: true
             runAsGroup: 1000
-            runAsNonRoot: true
+            runAsUser: 1000
             seccompProfile:
               type: RuntimeDefault
           args: [ "--httpPort=8080"]
@@ -139,13 +140,11 @@ spec:
             timeoutSeconds: 5
           resources:
             limits:
-              cpu: 1000m
-              ephemeral-storage: 1Gi
-              memory: 2Gi
+              cpu: 1500m
+              memory: 2.5Gi
             requests:
-              cpu: 200m
-              ephemeral-storage: 512Mi
-              memory: 512Mi
+              cpu: 500m
+              memory: 1Gi
           volumeMounts:
             - mountPath: /var/jenkins_home
               name: jenkins-home

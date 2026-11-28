@@ -40,19 +40,8 @@ controller:
 
 
   # OpenShift SCC & Read-Only Root Filesystem Fixes
-  runAsUser: null
-  fsGroup: null
-  podSecurityContextOverride:
-    runAsNonRoot: true
-    seccompProfile:
-      type: RuntimeDefault
-  containerSecurityContext:
-    runAsUser: null
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-        - ALL
+  openshift:
+    enabled: true
 
   initContainerEnv:
     - name: HOME

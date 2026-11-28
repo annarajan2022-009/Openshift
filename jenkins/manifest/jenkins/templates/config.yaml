@@ -19,6 +19,9 @@ data:
     # Prevent Setup Wizard when JCasC is enabled
     echo $JENKINS_VERSION > /var/jenkins_home/jenkins.install.UpgradeWizard.state
     echo $JENKINS_VERSION > /var/jenkins_home/jenkins.install.InstallUtil.lastExecVersion
+    echo "remove all plugins from shared volume"
+    # remove all plugins from shared volume
+    rm -rf /var/jenkins_home/plugins/*
     echo "download plugins"
     # Install missing plugins
     cp /var/jenkins_config/plugins.txt /var/jenkins_home;
