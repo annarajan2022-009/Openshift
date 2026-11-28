@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: kube-prometheus-stack
-  namespace: openshift-gitops
+  namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "3"
 spec:
@@ -10,7 +10,7 @@ spec:
   sources:
     - repoURL: https://github.io
       chart: kube-prometheus-stack
-      targetRevision: "*"
+      targetRevision: 94.1.0
       helm:
         releaseName: prometheus-stack
         valueFiles:
@@ -19,16 +19,14 @@ spec:
       targetRevision: main
       ref: values
   destination:
-    server: https://default.svc
+    name: in-cluster
     namespace: monitoring
-
   ignoreDifferences:
     - group: apiextensions.k8s.io
       kind: CustomResourceDefinition
       jsonPointers:
         - /spec
         - /status
-
   syncPolicy:
     automated:
       prune: true
@@ -37,6 +35,3 @@ spec:
       - ServerSideApply=true
       - SkipDryRunOnMissingResource=true
       - RespectIgnoreDifferences=true
-
-
-

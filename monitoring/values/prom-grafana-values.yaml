@@ -78,6 +78,14 @@ grafana:
     runAsGroup: null
   initChownData:
     enabled: false
+  sidecar:
+    resources:
+      requests:
+        cpu: 20m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
   additionalDataSources:
     - name: Loki
       type: loki
@@ -95,10 +103,7 @@ grafana:
       ephemeral-storage: 256Mi
   route:
     main:
-      enabled: true
-      host: grafana-monitoring.apps-crc.testing
-      tls:
-        termination: edge
+      enabled: false
 
 alertmanager:
   alertmanagerSpec:
